@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "overrides": [ ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "semi": [ "warn", "always" ],
+        "semi-spacing": [ "error", { "before": false } ],
+
+        "quotes": [ "warn", "single", { "avoidEscape": true } ],
+        "quote-props": [ "warn", "as-needed" ],
+
+        "comma-dangle": [ "warn", "never" ],
+        "comma-spacing": [ "warn", { "before": false, "after": true } ],
+
+        "no-trailing-spaces": [ "warn", { "skipBlankLines": false, "ignoreComments": false } ],
+        "space-before-function-paren": [ "warn", "never" ],
+        "keyword-spacing": [
+            "warn", {
+                "overrides": {
+                    "if": { "after": false },
+                    "for": { "after": false },
+                    "try": { "after": true },
+                    "catch": { "after": false }
+                }
+            }
+        ],
+
+        "linebreak-style": [ "error", "windows" ],
+        "eol-last": [ "error", "always" ],
+        "no-multiple-empty-lines": [ "warn", { "max": 1, "maxEOF": 0, "maxBOF": 0 } ]
+    }
+}
