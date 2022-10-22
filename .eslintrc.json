@@ -20,7 +20,7 @@
         "comma-spacing": [ "warn", { "before": false, "after": true } ],
 
         "no-trailing-spaces": [ "warn", { "skipBlankLines": false, "ignoreComments": false } ],
-        "space-before-function-paren": [ "warn", "never" ],
+        "space-before-function-paren": [ "warn", { "anonymous": "always", "named": "never" } ],
         "keyword-spacing": [
             "warn", {
                 "overrides": {
