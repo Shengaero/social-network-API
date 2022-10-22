@@ -1,0 +1,40 @@
+[
+    {
+        "thoughtText": "This is an example thought",
+        "username": "jjohnson",
+        "reactions": [
+            {
+                "reactionBody": "wow, what a great idea!",
+                "username": "lucygoodman"
+            },
+            {
+                "reactionBody": "yeah this is great!",
+                "username": "fredjones"
+            }
+        ]
+    },
+    {
+        "thoughtText": "I made a post too!",
+        "username": "fredjones",
+        "reactions": [
+            {
+                "reactionBody": "looks good to me!",
+                "username": "lucygoodman"
+            },
+            {
+                "reactionBody": "Oh I like this one a lot!",
+                "username": "jjohnson"
+            }
+        ]
+    },
+    {
+        "thoughtText": "Here's an idea!",
+        "username": "jjohnson",
+        "reactions": [
+            {
+                "reactionBody": "I like that one!",
+                "username": "fredjones"
+            }
+        ]
+    }
+]
