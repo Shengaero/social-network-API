@@ -11,8 +11,9 @@
     "rules": {
         "semi": [ "warn", "always" ],
         "semi-spacing": [ "error", { "before": false } ],
+        "indent": [ "warn", 4 ],
 
-        "quotes": [ "warn", "single", { "avoidEscape": true } ],
+        "quotes": [ "warn", "single", { "avoidEscape": true, "allowTemplateLiterals": true } ],
         "quote-props": [ "warn", "as-needed" ],
 
         "comma-dangle": [ "warn", "never" ],
@@ -33,6 +34,6 @@
 
         "linebreak-style": [ "error", "windows" ],
         "eol-last": [ "error", "always" ],
-        "no-multiple-empty-lines": [ "warn", { "max": 1, "maxEOF": 0, "maxBOF": 0 } ]
+        "no-multiple-empty-lines": [ "warn", { "max": 2, "maxEOF": 0, "maxBOF": 0 } ]
     }
 }
