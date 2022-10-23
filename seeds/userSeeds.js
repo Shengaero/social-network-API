@@ -2,9 +2,10 @@ const { User } = require('../db');
 const usersData = require('./usersData.json');
 
 const userSeeds = async () => {
+    console.log('Seeding users...');
     let firstUser = null;
     for(const userData of usersData) {
-        console.log(`Seeding user: ${JSON.stringify(userData)}`);
+        console.log(`Seeding user: ${JSON.stringify(userData) }`);
         const user = new User(userData);
         if(!firstUser) {
             firstUser = user;
