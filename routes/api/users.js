@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { User, Thought } = require('../../db');
-const { notFound, unimplemented, badRequest } = require('../errors');
+const { notFound, badRequest } = require('../errors');
 
 const findUserById = (userId) =>
     User.findById(userId)
@@ -13,9 +13,10 @@ router.get('/', async (_, res) => {
 });
 
 router.get('/:userId', async (req, res) => {
-    const user = await findUserById(req.params.userId);
+    const { userId } = req.params;
+    const user = await findUserById(userId);
     if(!user)
-        notFound();
+        notFound(`user with ID ${userId} not found`);
     res.status(200).json(user);
 });
 
@@ -34,7 +35,7 @@ router.put('/:userId', async (req, res) => {
     const { username, email } = req.body;
     const { userId } = req.params;
     if(!username && !email)
-        badRequest('missing "username" and "email", specify at least one!');
+        badRequest('missing "username" and "email", specify at least one');
 
     const data = {};
     if(username)
@@ -49,7 +50,7 @@ router.put('/:userId', async (req, res) => {
     );
 
     if(!user)
-        notFound();
+        notFound(`user with ID ${userId} not found`);
 
     if(username) {
         await Thought.updateMany(
