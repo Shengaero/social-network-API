@@ -9,7 +9,7 @@ const findUserById = (userId) =>
 
 router.get('/', async (_, res) => {
     const users = await User.find({});
-    res.status(200).json(users.map(user => user.toObject({ virtuals: true })));
+    res.status(200).json(users);
 });
 
 router.get('/:userId', async (req, res) => {
@@ -17,7 +17,7 @@ router.get('/:userId', async (req, res) => {
     const user = await findUserById(userId);
     if(!user)
         notFound(`user with ID ${userId} not found`);
-    res.status(200).json(user.toObject({ virtuals: true }));
+    res.status(200).json(user);
 });
 
 router.post('/', async (req, res) => {
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
         badRequest('missing "email" field');
     const user = new User({ username, email });
     await user.save();
-    res.status(201).json(user.toObject({ virtuals: true }));
+    res.status(201).json(user);
 });
 
 router.put('/:userId', async (req, res) => {
@@ -65,7 +65,7 @@ router.put('/:userId', async (req, res) => {
         );
     }
 
-    res.status(200).json((await findUserById(userId)).toObject({ virtuals: true }));
+    res.status(200).json(await findUserById(userId));
 });
 
 router.delete('/:userId', async (req, res) => {
@@ -101,7 +101,7 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
         user.friends.push(friend.id);
         await user.save();
     }
-    res.status(200).json(user.toObject({ virtuals: true }));
+    res.status(200).json(user);
 });
 
 router.delete('/:userId/friends/:friendId', async (req, res) => {
@@ -115,7 +115,7 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
     if(!user)
         notFound(`could not find user with ID: ${userId}`);
 
-    res.status(200).json(user.toObject({ virtuals: true }));
+    res.status(200).json(user);
 });
 
 module.exports = router;

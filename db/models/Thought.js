@@ -39,6 +39,10 @@ const thoughtSchema = new Schema({
         get: v => Date.parse(v)
     }
 }, {
+    id: false,
+    toJSON: {
+        virtuals: true
+    },
     virtuals: {
         reactionCount: {
             get() {

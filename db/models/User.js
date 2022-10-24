@@ -25,6 +25,10 @@ const userSchema = new Schema({
         default: () => []
     }]
 }, {
+    id: false,
+    toJSON: {
+        virtuals: true
+    },
     virtuals: {
         friendCount: {
             get() {
