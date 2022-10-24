@@ -7,7 +7,8 @@ const thoughtNotFound = (thoughtId) =>
 
 router.get('/', async (_, res) => {
     const thoughts = await Thought.find({});
-    res.status(200).json(thoughts);
+    res.status(200).json(thoughts.map(thought =>
+        thought.toObject({ virtuals: true })));
 });
 
 router.get('/:thoughtId', async (req, res) => {
@@ -15,7 +16,7 @@ router.get('/:thoughtId', async (req, res) => {
     const thought = await Thought.findById(thoughtId);
     if(!thought)
         thoughtNotFound(thoughtId);
-    res.status(200).json(thought);
+    res.status(200).json(thought.toObject({ virtuals: true }));
 });
 
 router.post('/', async (req, res) => {
@@ -47,7 +48,9 @@ router.post('/', async (req, res) => {
     user.thoughts.push(thought.id);                         // push thought ID to user's thoughts array
     await user.save();                                      // await saving user
 
-    res.status(201).json(thought);                          // 201 - Created, along with the new thought as a JSON
+    res.status(201).json(thought.toObject({                 // 201 - Created, along with the new thought as a JSON
+        virtuals: true
+    }));
 });
 
 router.put('/:thoughtId', async (req, res) => {
@@ -62,7 +65,7 @@ router.put('/:thoughtId', async (req, res) => {
     );
     if(!thought)
         thoughtNotFound(thoughtId);
-    res.status(200).json(thought);
+    res.status(200).json(thought.toObject({ virtuals: true }));
 });
 
 router.delete('/:thoughtId', async (req, res) => {
@@ -96,7 +99,7 @@ router.post('/:thoughtId/reactions', async (req, res) => {
     if(!thought)
         thoughtNotFound(thoughtId);
 
-    res.status(201).json(thought);
+    res.status(201).json(thought.toObject({ virtuals: true }));
 });
 
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
@@ -111,7 +114,7 @@ router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     if(!thought)
         thoughtNotFound(thoughtId);
 
-    res.status(200).json(thought);
+    res.status(200).json(thought.toObject({ virtuals: true }));
 });
 
 module.exports = router;

@@ -24,6 +24,14 @@ const userSchema = new Schema({
         ref: 'User',
         default: () => []
     }]
+}, {
+    virtuals: {
+        friendCount: {
+            get() {
+                return this.friends.length;
+            }
+        }
+    }
 });
 
 const User = model('User', userSchema);

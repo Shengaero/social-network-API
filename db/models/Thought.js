@@ -38,6 +38,14 @@ const thoughtSchema = new Schema({
         default: () => Date.now(),
         get: v => Date.parse(v)
     }
+}, {
+    virtuals: {
+        reactionCount: {
+            get() {
+                return this.reactions.length;
+            }
+        }
+    }
 });
 
 const Thought = model('Thought', thoughtSchema);
