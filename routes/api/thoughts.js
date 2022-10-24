@@ -1,21 +1,21 @@
 const router = require('express').Router();
 const { User, Thought } = require('../../db');
-const { unimplemented, notFound, badRequest } = require('../errors');
+const { notFound, badRequest } = require('../errors');
 
 const thoughtNotFound = (thoughtId) =>
     notFound(`thought with ID ${thoughtId} not found`);
 
 router.get('/', async (_, res) => {
-    const thoughts = await Thought.find({});
-    res.status(200).json(thoughts);
+    const thoughts = await Thought.find({});    // find all thoughts
+    res.status(200).json(thoughts);             // 200 - OK with thoughts as JSON
 });
 
 router.get('/:thoughtId', async (req, res) => {
-    const { thoughtId } = req.params;
-    const thought = await Thought.findById(thoughtId);
-    if(!thought)
-        thoughtNotFound(thoughtId);
-    res.status(200).json(thought);
+    const { thoughtId } = req.params;                       // get thoughtId from URL parameters
+    const thought = await Thought.findById(thoughtId);      // find thought by thoughtId
+    if(!thought)                                            // if no thought found
+        thoughtNotFound(thoughtId);                             // 404 - Not Found
+    res.status(200).json(thought);                          // 200 - OK with thought as JSON
 });
 
 router.post('/', async (req, res) => {
@@ -51,67 +51,67 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:thoughtId', async (req, res) => {
-    const { thoughtId } = req.params;
-    const { thoughtText } = req.body;
-    if(!thoughtText)
-        badRequest('missing "thoughtText" field');
-    const thought = await Thought.findByIdAndUpdate(
-        thoughtId,
-        { $set: { thoughtText: thoughtText } },
-        { runValidators: true, new: true }
+    const { thoughtId } = req.params;                   // get thoughtId URL parameter
+    const { thoughtText } = req.body;                   // get thoughtText field from request body
+    if(!thoughtText)                                    // if no thoughtText field was present
+        badRequest('missing "thoughtText" field');          // 400 - Bad Request
+    const thought = await Thought.findByIdAndUpdate(    // find and update thought...
+        thoughtId,                                          // by thoughtId
+        { $set: { thoughtText: thoughtText } },             // set thoughtText to thoughtText field in request body
+        { runValidators: true, new: true }                  // and run validators, returning the new version
     );
-    if(!thought)
-        thoughtNotFound(thoughtId);
-    res.status(200).json(thought);
+    if(!thought)                                        // if no thought was found
+        thoughtNotFound(thoughtId);                         // 404 - Not Found
+    res.status(200).json(thought);                      // 200 - OK with thought as JSON
 });
 
 router.delete('/:thoughtId', async (req, res) => {
-    const { thoughtId } = req.params;
-    const thought = await Thought.findByIdAndDelete(thoughtId);
-    if(!thought) {
-        res.sendStatus(200);
-        return;
+    const { thoughtId } = req.params;                           // get thoughtId URL parameter
+    const thought = await Thought.findByIdAndDelete(thoughtId); // find and delete thought by thoughtId
+    if(!thought) {                                              // if no thought was found
+        res.sendStatus(200);                                        // 200 - OK
+        return;                                                     // return
     }
-    await User.updateOne(
-        { username: thought.username },
-        { $pull: { thoughts: thoughtId } }
+    await User.updateOne(                                       // update user where...
+        { username: thought.username },                             // username matches the username of the deleted thought
+        { $pull: { thoughts: thought.id } }                         // pull thoughtId from thoughts array
     );
-    res.sendStatus(204);
+    res.sendStatus(204);                                        // 204 - No Content
 });
 
 router.post('/:thoughtId/reactions', async (req, res) => {
-    const { thoughtId } = req.params;
-    const { reactionBody, username } = req.body;
-    if(!reactionBody)
-        badRequest('missing "reactionBody" field');
-    if(!username)
-        badRequest('missing "username" field');
+    const { thoughtId } = req.params;                           // get thoughtId URL parameter
+    const { reactionBody, username } = req.body;                // get reactionBody and username from request body
+    if(!reactionBody)                                           // if reactionBody field not present
+        badRequest('missing "reactionBody" field');                 // 400 - Bad Request
+    if(!username)                                               // if username field not present
+        badRequest('missing "username" field');                     // 400 - Bad Request
 
-    const thought = await Thought.findByIdAndUpdate(
-        thoughtId,
-        { $push: { reactions: { reactionBody, username } } },
-        { runValidators: true, new: true }
+    const thought = await Thought.findByIdAndUpdate(            // find and update thought...
+        thoughtId,                                                  // by thoughtId
+        { $push: { reactions: { reactionBody, username } } },       // push new reaction to reactions array
+        { runValidators: true, new: true }                          // run validators and return new version
     );
 
-    if(!thought)
-        thoughtNotFound(thoughtId);
+    if(!thought)                                                // if no thought was found
+        thoughtNotFound(thoughtId);                                 // 404 - Not Found
 
-    res.status(201).json(thought);
+    res.status(201).json(thought);                              // 201 - Created with thought as JSON
 });
 
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
-    const { thoughtId, reactionId } = req.params;
+    const { thoughtId, reactionId } = req.params;       // get thoughtId and reactionId URL parameters
 
-    const thought = await Thought.findByIdAndUpdate(
-        thoughtId,
-        { $pull: { reactions: { reactionId } } },
-        { new: true }
+    const thought = await Thought.findByIdAndUpdate(    // find and update thought...
+        thoughtId,                                          // by thoughtId
+        { $pull: { reactions: { reactionId } } },           // pull reaction from reaction array
+        { new: true }                                       // return
     );
 
-    if(!thought)
-        thoughtNotFound(thoughtId);
+    if(!thought)                                        // if no thought was found
+        thoughtNotFound(thoughtId);                         // 404 - Not Found
 
-    res.status(200).json(thought);
+    res.status(200).json(thought);                      // 200 - OK with thought as JSON
 });
 
 module.exports = router;
