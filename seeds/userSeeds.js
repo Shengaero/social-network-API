@@ -7,11 +7,12 @@ const userSeeds = async () => {
     for(const userData of usersData) {
         console.log(`Seeding user: ${JSON.stringify(userData) }`);
         const user = new User(userData);
-        if(!firstUser) {
+        await user.save();
+        if(firstUser === null) {
             firstUser = user;
         } else {
-            user.friends.push(firstUser.id);
-            firstUser.friends.push(user.id);
+            user.friends.push(firstUser._id);
+            firstUser.friends.push(user._id);
         }
         await user.save();
     }
